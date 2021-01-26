@@ -5,3 +5,7 @@
   - name: Debug Facts
     ansible.builtin.debug:
       msg: "{{ ansible_facts }}"
+
+  - name: Debug Facts Hostname
+    ansible.builtin.debug:
+      msg: "{{ ansible_facts['nodename'] }}"
