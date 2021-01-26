@@ -8,7 +8,7 @@
       path: /root/testfile.txt
       state: touch
 
-    - name: Add line in file
+  - name: Add line in file
     lineinfile:
       path: /root/testfile.txt
       line: Ansible was here...
