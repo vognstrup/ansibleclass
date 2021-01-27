@@ -62,3 +62,13 @@
         connected: true
       wait_for_ip_address: "yes"
     register: "webserver"
+  - name: Set Fact webserver_ip_fact
+    set_fact:
+     webserver_ip_fact: "{{ webserver.instance.ipv4 }}"
+
+  - name: IP address info
+    debug:
+      msg: "{{ webserver_ip_fact }}"
+
+  - name: Add ansibleserver to ssh known_hosts
+    shell: "ssh-keyscan -t ecdsa {{ webserver_ip_fact }}  >> /home/{{ ansible_user_id }}/.ssh/known_hosts"
