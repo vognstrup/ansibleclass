@@ -1,8 +1,7 @@
 plugin: azure_rm
 auth_source: auto
 include_vm_resource_groups:
-- 'user6-ansible'
-- 'webserver_itdafv'
+- '*'
 keyed_groups:
 - prefix: tag
   key: tags
