@@ -72,3 +72,52 @@
 
   - name: Add ansibleserver to ssh known_hosts
     shell: "ssh-keyscan -t ecdsa {{ webserver_ip_fact }}  >> /home/{{ ansible_user_id }}/.ssh/known_hosts"
+
+  - name: Create a category
+    vmware_category:
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: no
+      category_name: "ansible_managed"
+      category_description: "Category for Ansible"
+      category_cardinality: 'multiple'
+      state: present
+    register: category
+
+  - name: Create a tag
+    vmware_tag:
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: no
+      category_id: "{{ category.category_results.category_id }}"
+      tag_name: "tag_webserver"
+      tag_description: "Web Server"
+      state: present
+    delegate_to: localhost
+
+  - name: Create a tag
+    vmware_tag:
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: no
+      category_id: "{{ category.category_results.category_id }}"
+      tag_name: "tag_dbserver"
+      tag_description: "Database Server"
+      state: present
+    delegate_to: localhost
+
+  - name: Add tags to webserver
+    vmware_tag_manager:
+      hostname: "{{ hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: no
+      tag_names:
+        - "tag_webserver"
+      object_name: "webserver"
+      object_type: VirtualMachine
+      state: add
+    delegate_to: localhost
