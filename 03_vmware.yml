@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  vars:
+
+  vars_prompt:
+    - name: password
+      prompt: VCenter Password
+      private: no
+
+  environment:
+    VMWARE_USER: administrator@vsphere.local
+    VMWARE_HOST: vcenter.ansible.local
+    VMWARE_VALIDATE_CERTS: no
+    VMWARE_PASSWORD: "{{ password }}"
+
+  tasks:
+  - name: Collect the list of the existing VM
+    vmware.vmware_rest.vcenter_vm_info:
+    register: existing_vms
+    until: existing_vms is not failed
+
+  - name: Show All Vms
+    debug:
+      msg: "{{ existing_vms }}"
