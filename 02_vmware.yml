@@ -1,0 +1,18 @@
+---
+- hosts: tag_webserver
+  remote_user: "user"
+  become: "yes"
+  vars:
+    websiteheader: "Ansible Playbook in vmware"
+    websiteauthor: "Ansible trainee"
+
+  roles:
+  - jesperberth.el_httpd
+
+  tasks:
+  - name: Add index.html
+    template:
+      src: index.html.j2
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
